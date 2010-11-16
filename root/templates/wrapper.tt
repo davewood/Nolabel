@@ -38,6 +38,13 @@
 <body>
     <div id="wrapper">
         <div id="header">
+            [% IF c.user_exists %]
+                [% c.user.email %]
+                <a href="[% c.uri_for(c.controller('Login').action_for('logout')) %]">Logout</a>
+            [% ELSE %]
+                <a href="[% c.uri_for(c.controller('Login').action_for('login')) %]">Login</a>
+                <a href="[% c.uri_for(c.controller('Users').action_for('register')) %]">Anmelden</a>
+            [% END %]
         </div>
 
         <div id="content">

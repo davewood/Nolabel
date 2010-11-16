@@ -63,6 +63,33 @@ __PACKAGE__->config(
         ENCODING            => 'UTF-8',
         render_die          => 1,
     },
+    'View::Plaintext' => {
+        INCLUDE_PATH => [
+            __PACKAGE__->path_to( 'root', 'templates' )
+        ],
+        TEMPLATE_EXTENSION  => '.tt',
+        ENCODING            => 'UTF-8',
+        render_die          => 1,
+    },
+    'View::Email' => {
+        stash_key       => 'email',
+        template_prefix => 'emails/',
+        default => {
+            content_type    => 'text/plain',
+            charset         => 'utf-8',
+            view            => 'Plaintext',
+        },
+        sender => {
+            mailer => 'SMTP',
+            mailer_args => {
+                ssl      => 1,
+                port     => 465,
+                host     => 'smtp.gmail.com',
+                sasl_username => '###',
+                sasl_password => '###',
+            }
+        }
+    },
     'Model::DB' => {
         fs_path      => __PACKAGE__->path_to( qw/ root static media / ),
         schema_class => 'Nolabel::Schema',

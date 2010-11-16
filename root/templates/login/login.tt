@@ -1,2 +1,2 @@
 [% render_login_form %]
-<a href="[% c.uri_for(c.controller('Users').action_for('lost_password')) %]">[% c.loc('users.lost_password') %]</a>
+<a href="[% c.uri_for(c.controller('Users').action_for('lost_password')) %]">Passwort vergessen?</a>
