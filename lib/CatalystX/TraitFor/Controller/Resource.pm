@@ -2,6 +2,9 @@ package CatalystX::TraitFor::Controller::Resource;
 use MooseX::MethodAttributes::Role;
 use namespace::autoclean;
 
+use MooseX::Types::Moose qw/ ArrayRef /;
+use MooseX::Types::Common::String qw/ NonEmptySimpleStr /;
+
 our $VERSION = '0.01';
 
 =head1 NAME
@@ -11,41 +14,39 @@ CatalystX::TraitFor::Controller::Resource - CRUD Role for your Controller
 =head1 SYNOPSIS
 
     # a Resource Controller
-    package Physio::Controller::Exercises;
+    package MyApp::Controller::CDs;
     with 'CatalystX::TraitFor::Controller::Resource';
     __PACKAGE__->config(
-        resultset_key   => 'exercises_rs',
-        resources_key   => 'exercises',
-        resource_key    => 'exercise',
-        model           => 'DB::Exercises',
-        form_class      => 'Physio::Form::Exercises',
-        form_template   => 'exercises/form.tt',
+        resultset_key   => 'cds_rs',
+        resources_key   => 'cds',
+        resource_key    => 'cd',
+        model           => 'DB::CDs',
+        form_class      => 'MyApp::Form::CDs',
+        form_template   => 'cds/form.tt',
+        redirect_mode   => 'show',
         actions         => {
             base => {
-                PathPart    => 'exercises',
-                Chained     => '',
-                CaptureArgs => 0,
+                PathPart    => 'cds',
             },
         },
     );
     
     # a nested Resource Controller
-    package Physio::Controller::Media;
+    package MyApp::Controller::Tracks;
     with 'CatalystX::TraitFor::Controller::Resource';
     __PACKAGE__->config(
-        parent_key         => 'exercise',
-        parents_accessor   => 'media',
-        resultset_key      => 'media_rs',
-        resources_key      => 'media',
-        resource_key       => 'm',
-        model              => 'DB::Media',
-        form_class         => 'Physio::Form::Media',
-        form_template      => 'media/form.tt',
+        parent_key         => 'cd',
+        parents_accessor   => 'tracks',
+        resultset_key      => 'tracks_rs',
+        resources_key      => 'tracks',
+        resource_key       => 'track',
+        model              => 'DB::Tracks',
+        form_class         => 'MyApp::Form::Tracks',
+        form_template      => 'tracks/form.tt',
         actions            => {
             base => {
-                PathPart    => 'media',
-                Chained     => '/exercises/base_with_id',
-                CaptureArgs => 0,
+                PathPart    => 'tracks',
+                Chained     => '/cds/base_with_id',
             },
         },
     );
@@ -54,6 +55,14 @@ CatalystX::TraitFor::Controller::Resource - CRUD Role for your Controller
 
 CatalystX::TraitFor::Controller::Resource enhances the consuming Controller with CRUD 
 functionality. It supports nested Resources and File Uploads.
+
+    base
+        index
+        create
+        base_with_id
+            show
+            edit
+            delete
 
 =head1 File Upload
 
@@ -77,59 +86,61 @@ required, the DBIC model associated with this resource. (e.g.: 'DB::CDs')
 =cut
 
 has 'model' => (
-    is => 'ro',
+    is       => 'ro',
     required => 1,
 );
 
 =head2 resultset_key
 
 stash key used to store the resultset of this resource. (e.g.: 'cds_rs')
-defaults to 'resultset'
 
 =cut
 
 has 'resultset_key' => (
-    is => 'ro',
-    default => 'resultset',
+    is       => 'ro',
+    isa      => NonEmptySimpleStr,
+    required => 1,
 );
 
 
 =head2 resources_key
 
 stash key used to store all results of this resource. (e.g.: 'tracks')
-defaults to 'resources'.
-You will need this in your template.
+You will need this to access a list of your resources in your template.
 
 =cut
 
 has 'resources_key' => (
-    is => 'ro',
-    default => 'resources',
+    is       => 'ro',
+    isa      => NonEmptySimpleStr,
+    required => 1,
 );
 
 =head2 resource_key
 
 stash key used to store specific result of this resource. (e.g.: 'track')
-defaults to 'resource'.
-You will need this in your template.
+You will need this to access your resource in your template.
 
 =cut
 
 has 'resource_key' => (
-    is => 'ro',
-    default => 'resource',
+    is       => 'ro',
+    isa      => NonEmptySimpleStr,
+    required => 1,
 );
 
 =head2 parent_key
 
 for a nested resource 'parent_key' is used as stash key to store the parent item
 (e.g.: 'cd')
+this is required if parent_key is set
 
 =cut
 
 has 'parent_key' => (
-    is => 'ro',
-    predicate => 'has_parent',
+    is          => 'ro',
+    isa         => NonEmptySimpleStr,
+    predicate   => 'has_parent',
 );
 
 =head2 parents_accessor
@@ -142,31 +153,32 @@ this is required if parent_key is set
 =cut
 
 has 'parents_accessor' => (
-    is => 'ro',
+    is  => 'ro',
+    isa => NonEmptySimpleStr,
 );
 
 =head2 form_class
 
 HTML::FormHandler class to use for this resource. 
-defaults to 'CatalystX::Form::Resources'
+e.g.: 'MyApp::Form::Resources'
 
 =cut
 
 has 'form_class' => (
     is => 'ro',
-    default => 'Physio::Form::Resources',
+    required => 1,
 );
 
 =head2 form_template
 
 template file for HTML::FormHandler
-defaults to 'resources/form.tt'
+optional, if you don't supply a form_template a stringified version will be used
 
 =cut
 
 has 'form_template' => (
-    is => 'ro',
-    default => 'resources/form.tt',
+    is          => 'ro',
+    predicate   => 'has_form_template',
 );
 
 =head2 activate_fields_create
@@ -174,11 +186,13 @@ has 'form_template' => (
 hashref of form fields to activate in the create form
 e.g. ['password', 'password_confirm']
 default = []
+Can be overriden with $c->stash->{activate_form_fields}
 
 =cut
 
 has 'activate_fields_create' => (
-    is => 'ro',
+    is      => 'ro',
+    isa     => ArrayRef,
     default => sub {[]},
 );
 
@@ -186,36 +200,90 @@ has 'activate_fields_create' => (
 
 hashref of form fields to activate in the edit form
 default = []
+Can be overriden with $c->stash->{activate_form_fields}
 
 =cut
+
 has 'activate_fields_edit' => (
-    is => 'ro',
+    is      => 'ro',
+    isa     => ArrayRef,
     default => sub {[]},
 );
 
-# path: /parents/1/resources/create   => redirect_path: /parents/1/resources
-# path: /parents/1/resources/3/edit   => redirect_path: /parents/1/resources
-# path: /parents/1/resources/3/delete => redirect_path: /parents/1/resources
-sub _redirect_to_index {
+=head2 redirect_mode
+
+redirect after create/edit/delete can be 'show' or 'index'
+
+default = 'show'
+
+redirect_mode = show:
+    resources/create   => resources/<id>/show
+    resources/1/edit   => resources/1/show
+    resources/1/delete => resources/
+redirect_mode = index:
+    resources/create   => resources/
+    resources/1/edit   => resources/
+    resources/1/delete => resources/
+redirect_mode 'show_parent':
+    path: /parents/1/resources/create   => redirect_path: /parents/1/show
+    path: /parents/1/resources/3/edit   => redirect_path: /parents/1/show
+    path: /parents/1/resources/3/delete => redirect_path: /parents/1/show
+
+ATTENTION: If you add custom edit methods you have to make sure the PathPart starts with 'edit.*'. Otherwise redirection will fail.
+
+=cut
+
+has 'redirect_mode' => (
+    is => 'ro',
+    default => 'index',
+);
+
+sub _path_part_prefix {
     my ($self, $c) = @_;
-    my @path_elements = split('/', $c->req->path);
-    my $last = $#path_elements;
-    my $path_element = $path_elements[$#path_elements];
-    if ('create' eq $path_element) {
-        $last -= 1;
+    my @path = split '/', $c->req->path;
+    my $last;
+    #if ($c->action->name =~ '^(edit|move|delete).*') {
+    #} else {
+    #}
+    if ($c->action->name eq 'create') {
+        $last = @path - 3;
+    } else { 
+        # edit*, move, delete
+        $last = @path - 4;
     }
-    elsif ('edit' eq $path_element) {
-        $last -= 2;
+    my $path_part = join '/', @path[0 .. $last];
+    $path_part .= '/' if $path_part;
+    return '/' . $path_part;
+}
+
+# redirect_mode 'index':
+#   path: /parents/1/resources/create   => redirect_path: /parents/1/resources
+#   path: /parents/1/resources/3/edit   => redirect_path: /parents/1/resources
+#   path: /parents/1/resources/3/delete => redirect_path: /parents/1/resources
+# redirect_mode 'show':
+#   path: /parents/1/resources/create   => redirect_path: /parents/1/resources/<id>/show
+#   path: /parents/1/resources/3/edit   => redirect_path: /parents/1/resources/3/show
+#   path: /parents/1/resources/3/delete => redirect_path: /parents/1/resources
+# redirect_mode 'show_parent':
+#   path: /parents/1/resources/create   => redirect_path: /parents/1/show
+#   path: /parents/1/resources/3/edit   => redirect_path: /parents/1/show
+#   path: /parents/1/resources/3/delete => redirect_path: /parents/1/show
+sub _redirect {
+    my ($self, $c) = @_;
+    my $path = '/';
+    # get the path part array and compute a string
+    my $path_part = join '/', @{$self->action_for('base')->attributes->{PathPart}};
+    if ($self->redirect_mode eq 'index') {
+        $path = $self->_path_part_prefix($c) . $path_part . '/';
+    } elsif ($self->redirect_mode eq 'show') {
+        if ($c->action->name eq 'delete') {
+            $path = $self->_path_part_prefix($c) . $path_part . '/';
+        } else {
+            $path = $self->_path_part_prefix($c) . $path_part . '/' . $c->stash->{$self->resource_key}->id . '/show';
+        }
+    } elsif ($self->redirect_mode eq 'show_parent') {
+        $path = $self->_path_part_prefix($c) . 'show';
     }
-    # for custom edit like edit_file, edit_password, ...
-    elsif ($path_element =~ m/^edit\w+/) {
-        $last -= 2;
-    }
-    elsif ('delete' eq $path_element) {
-        $last -= 2;
-    }
-    my @index_path_elements = @path_elements[0 .. $last];
-    my $path = '/' . join('/', @index_path_elements);
     $c->res->redirect($path);
 }
 
@@ -225,7 +293,7 @@ the following paths will be loaded
 
 =cut
 
-sub base :Chained('') :PathPart('resources') :CaptureArgs(0) {
+sub base : Chained('') PathPart('') CaptureArgs(0) {
     my ($self, $c ) = @_;
     # Store the ResultSet in stash so it's available for other methods
     # get the model from the controllers config that consumes this role
@@ -235,15 +303,15 @@ sub base :Chained('') :PathPart('resources') :CaptureArgs(0) {
     } else {
         $c->stash($self->resultset_key => $c->model($self->model));
     }
-};
+}
 
-sub base_with_id :Chained('base') :PathPart('') :CaptureArgs(1) {
+sub base_with_id : Chained('base') PathPart('') CaptureArgs(1) {
     my ($self, $c, $id ) = @_;
     my $resource = $c->stash->{$self->resultset_key}->find($id);
     if ($resource) {
         $c->stash->{$self->resource_key} = $resource;
     } else {
-        $c->stash(error_msg => "No such resource: " . $id);
+        $c->stash(error_msg => $self->_msg($c, 'not_found', $id));
         $c->detach('/error404');
     }
 }
@@ -254,7 +322,7 @@ a list of all resources is accessible as $c->stash->{resources}
 
 =cut
 
-sub index :Chained('base') :PathPart('') :Args(0) {
+sub index : Chained('base') PathPart('') Args(0) {
     my ($self, $c ) = @_;
     $c->stash($self->resources_key => [ $c->stash->{$self->resultset_key}->all ]);
 }
@@ -265,7 +333,7 @@ the resource specified by its id is accessible as $c->stash->{resource}
 
 =cut
 
-sub show :Chained('base_with_id') :PathPart('show') :Args(0) {
+sub show : Chained('base_with_id') PathPart('show') Args(0) {
     my ($self, $c ) = @_;
 }
 
@@ -275,10 +343,14 @@ create a resource
 
 =cut
 
-sub create :Chained('base') :PathPart('create') :Args(0) {
+sub create : Chained('base') PathPart('create') Args(0) {
     my ( $self, $c ) = @_;
     my $resource = $c->stash->{$self->resultset_key}->new_result({});
-    return $self->form($c, $resource, $self->activate_fields_create);
+    $c->stash(
+        $self->resource_key => $resource,
+        set_create_msg => 1,
+    );
+    $self->form($c, $self->activate_fields_create);
 }
 
 =head2 delete
@@ -287,11 +359,13 @@ delete a specific resource
 
 =cut
 
-sub delete :Chained('base_with_id') :PathPart('delete') :Args(0) {
+sub delete : Chained('base_with_id') PathPart('delete') Args(0) {
     my ( $self, $c ) = @_;
-    $c->stash->{$self->resource_key}->delete($c);
-    $c->flash(msg => 'Resource deleted');
-    $self->_redirect_to_index($c);
+    my $resource = $c->stash->{$self->resource_key};
+    my $msg = $self->_msg($c, 'delete');
+    $resource->delete($c);
+    $c->flash(msg => $msg);
+    $self->_redirect($c);
 }
 
 =head2 edit
@@ -302,29 +376,68 @@ edit a specific resource
 
 sub edit : Chained('base_with_id') PathPart('edit') Args(0) {
     my ( $self, $c ) = @_;
-    return $self->form($c, $c->stash->{$self->resource_key}, $self->activate_fields_edit);
+    $c->stash(set_update_msg => 1);
+    $self->form($c, $self->activate_fields_edit);
 }
 
 # $activate_fields is a hashref with fields to activate
-# this provides a hook so you can use moose method modifiers
-# in the consuming controller using "around 'form'" and adding
-# the hashref in $self->$orig(@_, ['activate_this_field']);
+# set $c->stash->{activate_form_fields} to override fields you want activated.
+# e.g.: $c->stash->{activate_form_fields} = [ 'password', 'password_repeat' ]
 sub form {
-    my ( $self, $c, $resource, $activate_fields ) = @_;
+    my ( $self, $c, $activate_fields ) = @_;
 
-    # HFH clears the arrayref
-    my $form = $self->form_class->new(active => [@$activate_fields]);
+    my $resource = $c->stash->{$self->resource_key};
+    # activate_form_fields in stash overrides activate_fields from config
+    my $activate_form_fields = $c->stash->{activate_form_fields} || [@$activate_fields];
 
-    $c->stash( template => $self->form_template, form => $form );
+    # if you want to pass additional attributes to the form put a hashref in
+    # the stash key 'form_attrs'
+    my $form_attrs = $c->stash->{form_attrs} || {};
 
+    my $form = $self->form_class->new(%$form_attrs);
     $form->process(
+        active  => $activate_form_fields,
         item    => $resource, 
         params  => $c->req->params,
     );
 
+    if($self->has_form_template) {
+        $c->stash( template => $self->form_template, form => $form );
+    } else {
+        my $rendered_form = $form->render;
+        $c->stash( template => \$rendered_form );
+    }
+
     return unless $form->validated;  
-    $c->flash(msg => 'Resource created/edited');
-    $self->_redirect_to_index($c);
+
+    if ($c->stash->{set_create_msg}) {
+        $c->flash(msg => $self->_msg($c, 'create'));
+    } elsif ($c->stash->{set_update_msg}) {
+        $c->flash(msg => $self->_msg($c, 'update'));
+    }
+
+    $self->_redirect($c);
+}
+
+sub _msg {
+    my ($self, $c, $action, $id) = @_;   
+
+    if($action eq 'not_found') {
+        return $c->can('loc') ? $c->loc('error.resource_not_found', $id) : "No such resource: $id";
+    } elsif($action eq 'create') {
+        return $c->can('loc') ? $c->loc('resources.created', $self->_name($c)) : $self->_name($c) . " created.";
+    } elsif($action eq 'update') {
+        return $c->can('loc') ? $c->loc('resources.updated', $self->_name($c)) : $self->_name($c) . " updated.";
+    } elsif($action eq 'delete') {
+        return $c->can('loc') ? $c->loc('resources.deleted', $self->_name($c)) : $self->_name($c) . " deleted.";
+    }
+}
+
+sub _name {
+    my ($self, $c) = @_;   
+    my $resource = $c->stash->{$self->resource_key};
+    my $name = $resource->result_source->has_column('name') ? $resource->name : ucfirst($self->resource_key);
+    return $name;
 }
 
 =head1 AUTHOR

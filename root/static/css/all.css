@@ -1,0 +1,151 @@
+body {
+    background-color:#fff;
+    color:black;
+    font-family:Georgia,'Courier New',Courier,serif;
+    font-size:18px; /* default font size */
+    font-weight:normal;
+}
+
+#wrapper {
+    background-color:#fff;
+    margin:2em auto 3em;
+    padding:1em;
+    width:980px;
+    border:1px dotted grey;
+}
+
+#header {
+    border-bottom:1px dotted grey;
+    margin-bottom:0.5em;
+    padding-bottom:0.5em;
+}
+
+#content {
+    min-height:400px;
+}
+
+#msg {
+    color:green;
+}
+
+#error_msg, .error_message {
+    color:red;
+}
+
+div.media {
+    padding:1em;
+}
+
+a img {
+    border:0 solid transparent;
+}
+
+a, a:link {
+    color:#30588B;
+    text-decoration:none;
+}
+
+a:visited {
+    color:#6495CD;
+}
+
+a:hover, a:active {
+    text-decoration:underline;
+}
+
+.clear {
+    clear:both;
+}
+
+fieldset {
+    border:0 solid transparent;
+}
+
+form div {
+    margin-bottom:0.5em;
+    margin-top:0.5em;
+}
+
+form div label.label {
+    float:left;
+    width:11em;
+}
+
+form input {
+    border:2px solid grey;
+    -moz-border-radius: 5px;
+    padding: 2px;
+}
+
+form.button {
+    display:inline;
+}
+
+form input[type="image"] {
+    border:0px solid transparent;
+}
+
+#available_exercises button {
+    -moz-border-radius: 5px;
+    border:1px solid black;
+}
+#available_exercises .disabled button {
+    background-color:green;
+}
+#available_exercises .enabled button {
+    background-color:red;
+}
+#enabled_exercises button {
+    background-color:red;
+    -moz-border-radius: 5px;
+    border:1px solid black;
+}
+
+form input[type="radio"], form input[type="checkbox"] {
+    margin-left:12em;
+}
+
+table td {
+    padding-right:1em;
+}
+
+#enabled_tags {
+    height:50px;
+}
+
+.tag, #disable_all {
+    color:black;
+    border:1px solid black;
+    padding:2px;
+    float:left;
+    margin:1px;
+    -moz-border-radius: 5px;
+}
+
+.tag.enabled {
+    background-color:red;
+}
+
+.tag.disabled {
+    background-color:green;
+}
+
+.tag:hover, .tag:active {
+    background-color:#fc1;
+    text-decoration:none;
+}
+
+#disable_all {
+    background-color:#fc1;
+    display:none;
+}
+
+#left {
+    width:650px;
+    float:left;
+}
+
+#right {
+    width:300px;
+    float:right;
+}

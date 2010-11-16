@@ -4,7 +4,12 @@ use namespace::autoclean;
 
 our $VERSION = '0.01';
 
-with 'CatalystX::TraitFor::Controller::Resource';
+# rename _msg from CatalystX::TraitFor::Controller::Resource to _msg
+# so we can provide our own _msg method (which calls __msg if needed)
+with 'CatalystX::TraitFor::Controller::Resource' => {
+    -alias      => { _msg => '__msg' },
+    -excludes   => '_msg',
+};
 
 =head1 NAME
 
@@ -16,10 +21,23 @@ see L<CatalystX::TraitFor::Controller::Resource>
 
 =head1 DESCRIPTION
 
-adds these paths to your Controller 
+adds these paths to your Controller which call move_previous/move_next
+on your resource item as provided by L<DBIx::Class::Ordered>
 
     /resource/*/move_previous
     /resource/*/move_next
+
+the following action tree will be created
+
+    base
+        index
+        create
+        base_with_id
+            show
+            edit
+            delete
+            move_previous
+            move_next
 
 =head2 move_previous
     
@@ -31,27 +49,32 @@ adds these paths to your Controller
 
 =cut
 
-sub move_next :Chained('base_with_id') :PathPart('move_next') :Args(0) {
+sub move_next : Chained('base_with_id') PathPart('move_next') Args(0) {
     my ( $self, $c ) = @_;
     my $resource = $c->stash->{$self->resource_key};
     $resource->move_next;
-    $self->redirect($c);
+    $c->flash(msg => $self->_msg($c, 'move_next'));
+    $self->_redirect($c);
 }
 
-sub move_previous :Chained('base_with_id') :PathPart('move_previous') :Args(0) {
+sub move_previous : Chained('base_with_id') PathPart('move_previous') Args(0) {
     my ( $self, $c ) = @_;
     my $resource = $c->stash->{$self->resource_key};
     $resource->move_previous;
-    $self->redirect($c);
+    $c->flash(msg => $self->_msg($c, 'move_previous'));
+    $self->_redirect($c);
 }
 
-sub redirect {
-    my ( $self, $c ) = @_;
-    if($self->has_parent) {
-        $c->response->redirect($c->uri_for($self->action_for('index'), [ $c->stash->{$self->parent_key}->id ]));
-    } else {
-        $c->response->redirect($c->uri_for($self->action_for('index')));
+sub _msg {
+    my ($self, $c, $action, $id) = @_;   
+
+    if($action eq 'move_next') {
+        return $c->can('loc') ? $c->loc('resources.moved_next', $self->_name($c)) : $self->_name($c) . " moved next.";
+    } elsif($action eq 'move_previous') {
+        return $c->can('loc') ? $c->loc('resources.moved_previous', $self->_name($c)) : $self->_name($c) . " moved previous.";
     }
+
+    return $self->__msg($c, $action, $id);
 }
 
 =head1 AUTHOR

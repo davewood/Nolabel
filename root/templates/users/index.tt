@@ -1,0 +1,4 @@
+[% FOREACH user = users %]
+    <a href="[% c.uri_for(c.controller('Users').action_for('show'), [ user.id ] ) %]">[% user.name %]</a>
+    <br/>
+[% END %]
