@@ -1,0 +1,5 @@
+Makefile
+blib
+inc
+root/media/*
+data

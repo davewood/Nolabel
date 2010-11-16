@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
+<head>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta http-equiv="content-language" content="de" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="/static/icons/favicon.jpg" type="image/jpeg" />
+    <link rel="icon" href="/static/icons/favicon.jpg" type="image/jpeg" />
+    <title>Nolabel.at</title>
+    <link rel="stylesheet" href="/static/css/all.css" type="text/css" title="Nolabel Stylesheet" charset="utf-8" media="all" />
+
+    <!-- JQUERY -->
+<!--
+    <script type="text/javascript" src="/static/js/jquery/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery/js/jquery-ui-1.8.5.custom.min.js"></script>
+    <link type="text/css" href="/static/js/jquery/themes/physio/jquery-ui-1.8.5.custom.css" rel="stylesheet" />
+-->
+
+    <!-- FLOWPLAYER -->
+<!--
+    <script type="text/javascript" src="/static/js/flowplayer/flowplayer.min.js"></script>
+    <script type="text/javascript" src="/static/js/flowplayer/flowplayer.playlist.js"></script>
+    <script type="text/javascript" src="/static/js/tinymce/tiny_mce.js"></script>
+-->
+
+    <!-- TINYMCE -->
+<!--
+    <script type="text/javascript">tinyMCE.init({
+        mode : "textareas",
+        theme : "simple"
+    });
+    </script>
+-->
+
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+        </div>
+
+        <div id="content">
+            <div id="msg">[% msg %]</div>
+            <div id="error_msg">[% error_msg %]</div>
+            [% content %]
+        </div>
+        <br class="clear" />
+    </div>
+</body>
+</html>
+
