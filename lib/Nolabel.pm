@@ -73,7 +73,7 @@ __PACKAGE__->config(
     },
     'View::Email' => {
         stash_key       => 'email',
-        template_prefix => 'emails/',
+        template_prefix => 'emails',
         default => {
             content_type    => 'text/plain',
             charset         => 'utf-8',

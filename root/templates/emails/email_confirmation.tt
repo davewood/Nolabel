@@ -1,0 +1,15 @@
+Click this link to confirm your email address:
+
+[% url_link %]
+
+
+
+
+Alternatively you can enter this digest
+
+[% digest %]
+
+at the following page
+
+[% url_form %]
+
