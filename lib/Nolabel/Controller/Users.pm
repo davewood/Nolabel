@@ -3,16 +3,7 @@ use Moose;
 use namespace::autoclean;
 use Nolabel::Form::Users;
 
-BEGIN { extends 
-    'Catalyst::Controller::ActionRole',
-}
-
-# still render text/html with our View
-__PACKAGE__->config(
-    map => {
-        'text/html' => [ 'View', 'HTML' ],
-    }
-);
+BEGIN { extends 'Catalyst::Controller' }
 
 with 'CatalystX::TraitFor::Controller::Resource';
 __PACKAGE__->config(
@@ -23,12 +14,20 @@ __PACKAGE__->config(
     form_class              => 'Nolabel::Form::Users',
     form_template           => 'users/form.tt',
     redirect_mode           => 'show',
-    #activate_fields_create  => ['name'],
-    #activate_fields_edit    => ['edit_file'],
     actions         => {
         base => { 
             PathPart    => 'users', 
             Chained     => '/login/required', 
+        },
+        edit_password => {
+            Does            => 'ACL',
+            AllowedRole     => [qw/ is_su can_edit_password/],
+            ACLDetachTo     => '/denied',
+        },
+        change_email => {
+            Does            => 'ACL',
+            AllowedRole     => [qw/ is_su can_change_email/],
+            ACLDetachTo     => '/denied',
         },
     },
 );
@@ -37,6 +36,13 @@ __PACKAGE__->config(
 before [qw/create/] => sub {
     my ( $self, $c ) = @_;
     $c->detach('/error404');
+};
+
+before [qw/edit delete send_password/] => sub {
+    my ( $self, $c ) = @_;
+    my $user_id = $c->stash->{user}->id;
+    $c->detach('/denied') unless 
+        ($c->user->id == $user_id) || $c->check_user_roles('is_su');
 };
 
 # if users delete their account, logout and redirect to index
@@ -58,11 +64,11 @@ before 'edit' => sub {
     return if ($c->stash->{activate_form_fields});
 
     # set active fields for edit form
-    if ($c->check_user_roles('admin')) {
+    if ($c->check_user_roles('is_su')) {
         $c->stash->{activate_form_fields} = [qw/name email status roles edit_password/];
     }
     else {
-        $c->stash->{activate_form_fields} = [qw/name status/];
+        $c->stash->{activate_form_fields} = [qw/name change_email status send_password/];
     }
 };
 
@@ -101,11 +107,13 @@ sub change_email : Chained('base_with_id') PathPart('change_email') Args(0) {
         if ($error->isa('Nolabel::Error::UserExists')) {
             $form->field('email')->add_error($error->message);
             $c->detach;
-        } elsif ($error->isa('Nolabel::Error::EmailDeliveryFailed')) {
+        }
+        elsif ($error->isa('Nolabel::Error::EmailDeliveryFailed')) {
             $c->flash(error_msg => $error->message);
             $c->res->redirect($c->uri_for($c->controller('Root')->action_for('index')));
             $c->detach;
-        } else {
+        }
+        else {
             die $error;
         }
     };
@@ -159,11 +167,13 @@ sub lost_password : Path('/lost_password') Args(0) {
         if ($error->isa('Nolabel::Error::UserNotFound')) {
             $form->field('email')->add_error($error->message);
             $c->detach;
-        } elsif ($error->isa('Nolabel::Error::EmailDeliveryFailed')) {
+        }
+        elsif ($error->isa('Nolabel::Error::EmailDeliveryFailed')) {
             $c->flash(error_msg => $error->message);
             $c->res->redirect($c->uri_for($c->controller('Root')->action_for('index')));
             $c->detach;
-        } else {
+        }
+        else {
             die $error;
         }
     };
@@ -208,11 +218,13 @@ sub register : Path('/register') Args(0) {
         if ($error->isa('Nolabel::Error::UserExists')) {
             $form->field('email')->add_error($error->message);
             $c->detach;
-        } elsif ($error->isa('Nolabel::Error::EmailDeliveryFailed')) {
+        }
+        elsif ($error->isa('Nolabel::Error::EmailDeliveryFailed')) {
             $c->flash(error_msg => $error->message);
             $c->res->redirect($c->uri_for($c->controller('Root')->action_for('index')));
             $c->detach;
-        } else {
+        }
+        else {
             die $error;
         }
     };  
@@ -220,7 +232,6 @@ sub register : Path('/register') Args(0) {
     $c->flash(msg =>"A confirmation email with instructions has been sent to $email. Follow them to activate your account.");
     $c->res->redirect($c->uri_for($c->controller('Confirmations')->action_for('confirm_form')));
 }
-
 
 __PACKAGE__->meta->make_immutable;
 

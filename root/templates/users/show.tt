@@ -6,11 +6,6 @@
         onclick="javascript:return confirm('Do you really want to delete this user?')">
 </form>
 
-<form class="button" action="[% c.uri_for(c.controller('Users').action_for('send_password'), [ user.id ] ) %]">
-    <input type="submit" value="send new password" 
-        onclick="javascript:return confirm('Do you really want to send a new password?')">
-</form>
-
 <br/><br/>
 
 [% user.email %]

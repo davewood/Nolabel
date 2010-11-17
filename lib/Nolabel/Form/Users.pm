@@ -44,7 +44,7 @@ has_field 'change_email' => (
 sub html_change_email {
     my ( $self, $field ) = @_;
     my $user_id = $self->item->id;
-    return '<div><label class="label">Email: </label><a href="/users/' . $user_id .  '/change_email">change email</a></div>';
+    return qq{<div><label class="label">Email: </label><a class="button" href="/users/$user_id/change_email">change email</a></div>};
 }
 
 has_field 'status' => ( 
@@ -61,6 +61,24 @@ has_field 'password'         => (
     required    => 1,
     inactive    => 1,
 );
+
+has_field 'send_password' => (
+    type        => 'Display',
+    inactive    => 1,
+);
+sub html_send_password {
+    my ( $self, $field ) = @_;
+    my $user_id = $self->item->id;
+    return qq{
+        <div>
+            <label class="label">Password: </label>
+            <form class="button" action="/users/$user_id/send_password">
+                <input type="submit" value="send new password"
+                    onclick="javascript:return confirm('Do you really want to send a new password?')">
+            </form>
+        </div>
+    };
+}
 
 has_field 'password_confirm' => ( 
     type        => 'PasswordConf',

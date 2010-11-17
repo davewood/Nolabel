@@ -38,6 +38,7 @@
 <body>
     <div id="wrapper">
         <div id="header">
+            <a href="[% c.uri_for(c.controller('Root').action_for('index')) %]">Home</a>
             [% IF c.user_exists %]
                 [% c.user.email %]
                 <a href="[% c.uri_for(c.controller('Login').action_for('logout')) %]">Logout</a>
