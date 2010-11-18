@@ -3,7 +3,7 @@ use Moose;
 use namespace::autoclean;
 use Nolabel::Form::Users;
 
-BEGIN { extends 'Catalyst::Controller' }
+BEGIN { extends 'Catalyst::Controller::ActionRole' }
 
 with 'CatalystX::TraitFor::Controller::Resource';
 __PACKAGE__->config(
@@ -14,19 +14,14 @@ __PACKAGE__->config(
     form_class              => 'Nolabel::Form::Users',
     form_template           => 'users/form.tt',
     redirect_mode           => 'show',
-    actions         => {
+    actions => {
         base => { 
             PathPart    => 'users', 
             Chained     => '/login/required', 
         },
-        edit_password => {
+        index => {
             Does            => 'ACL',
-            AllowedRole     => [qw/ is_su can_edit_password/],
-            ACLDetachTo     => '/denied',
-        },
-        change_email => {
-            Does            => 'ACL',
-            AllowedRole     => [qw/ is_su can_change_email/],
+            AllowedRole     => ['is_su'],
             ACLDetachTo     => '/denied',
         },
     },
@@ -38,7 +33,7 @@ before [qw/create/] => sub {
     $c->detach('/error404');
 };
 
-before [qw/edit delete send_password/] => sub {
+before [qw/show edit delete send_password change_email edit_password/] => sub {
     my ( $self, $c ) = @_;
     my $user_id = $c->stash->{user}->id;
     $c->detach('/denied') unless 
@@ -52,7 +47,8 @@ around 'delete' => sub {
         $self->$orig($c);
         $c->logout;
         $c->res->redirect('/');
-    } else {
+    }
+    else {
         $self->$orig($c);
     }
 };
@@ -65,10 +61,10 @@ before 'edit' => sub {
 
     # set active fields for edit form
     if ($c->check_user_roles('is_su')) {
-        $c->stash->{activate_form_fields} = [qw/name email status roles edit_password/];
+        $c->stash->{activate_form_fields} = [qw/delete_account name email status roles edit_password/];
     }
     else {
-        $c->stash->{activate_form_fields} = [qw/name change_email status send_password/];
+        $c->stash->{activate_form_fields} = [qw/delete_account change_email send_password/];
     }
 };
 
@@ -87,7 +83,11 @@ sub change_email : Chained('base_with_id') PathPart('change_email') Args(0) {
         active  => [qw/email/],
         params  => $c->req->params,
     );
-    $c->stash( template => 'users/form.tt', form => $form );
+    $c->stash( 
+        template    => 'users/form.tt', 
+        form        => $form,
+        msg         => 'Enter a new email address.',
+    );
     return unless $form->validated;
 
     my $email = $form->field('email')->value;
@@ -162,7 +162,8 @@ sub lost_password : Path('/lost_password') Args(0) {
             # send the confirmation mail to the user
             $c->model('Email')->send_lost_password_confirmation($c, $email, $confirmation->digest);
         });
-    } catch {
+    }
+    catch {
         my $error = $_;
         if ($error->isa('Nolabel::Error::UserNotFound')) {
             $form->field('email')->add_error($error->message);
@@ -194,7 +195,7 @@ sub register : Path('/register') Args(0) {
     my $form = Nolabel::Form::UsersBase->new;
 
     $form->process(  
-        active  => [qw/name email/],
+        active  => [qw/email/],
         params  => $c->req->params,
     ); 
     $c->stash( template => 'users/form.tt', form => $form );
@@ -202,18 +203,18 @@ sub register : Path('/register') Args(0) {
     return unless $form->validated;
 
     my $email = $form->field('email')->value;
-    my $name = $form->field('name')->value;
     
     use Try::Tiny; 
     try {   
         $c->model('DB')->schema->txn_do( sub {
             # creates the confirmation and puts the digest into c.stash.digest
-            my $confirmation = $c->model('Confirmation')->create($c, 'register', { email => $email, name => $name });
+            my $confirmation = $c->model('Confirmation')->create($c, 'register', { email => $email });
         
             # send the confirmation mail to the user
             $c->model('Email')->send_registration_confirmation($c, $email, $confirmation->digest);
         });
-    } catch {
+    }
+    catch {
         my $error = $_;
         if ($error->isa('Nolabel::Error::UserExists')) {
             $form->field('email')->add_error($error->message);

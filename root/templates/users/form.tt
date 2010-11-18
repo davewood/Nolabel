@@ -8,5 +8,7 @@
 [% form.result.field('send_password').render %]
 [% form.result.field('roles').render %]
 [% form.result.field('status').render %]
+[% form.result.field('delete_account').render %]
 [% form.result.field('submit').render %]
 [% form.render_end %]
+

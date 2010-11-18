@@ -298,8 +298,8 @@ sub base : Chained('') PathPart('') CaptureArgs(0) {
     # Store the ResultSet in stash so it's available for other methods
     # get the model from the controllers config that consumes this role
     if($self->has_parent) {
-        my $method = $self->parents_accessor;
-        $c->stash($self->resultset_key => scalar $c->stash->{$self->parent_key}->$method);
+        my $resultset = $c->stash->{$self->parent_key}->related_resultset($self->parents_accessor);
+        $c->stash($self->resultset_key => $resultset);
     } else {
         $c->stash($self->resultset_key => $c->model($self->model));
     }

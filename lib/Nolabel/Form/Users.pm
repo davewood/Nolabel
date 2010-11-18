@@ -34,7 +34,7 @@ has_field 'edit_password' => (
 sub html_edit_password {
     my ( $self, $field ) = @_;
     my $user_id = $self->item->id;
-    return '<div><label class="label">Password: </label><a href="/users/' . $user_id .  '/edit_password">edit password</a></div>';
+    return qq{<div><label class="label">Password: </label><a class="button" href="/users/$user_id/edit_password">edit password</a></div>};
 }
 
 has_field 'change_email' => (
@@ -93,5 +93,23 @@ has_field 'roles' => (
     multiple    => 1,
     inactive    => 1,
 );
+
+has_field 'delete_account' => (
+    type        => 'Display',
+    inactive    => 1,
+);
+sub html_delete_account {
+    my ( $self, $field ) = @_;
+    my $user_id = $self->item->id;
+    return qq{
+        <div>
+            <label class="label">Account: </label>
+            <form class="button" action="/users/$user_id/delete">
+                <input type="submit" value="delete" 
+                    onclick="javascript:return confirm('Do you really want to delete this user?')">
+            </form>
+        </div>
+    };
+}
 
 __PACKAGE__->meta->make_immutable;

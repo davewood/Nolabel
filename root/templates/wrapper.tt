@@ -39,12 +39,14 @@
     <div id="wrapper">
         <div id="header">
             <a href="[% c.uri_for(c.controller('Root').action_for('index')) %]">Home</a>
+            <a href="[% c.uri_for(c.controller('Artists').action_for('index')) %]">Artists</a>
             [% IF c.user_exists %]
                 [% c.user.email %]
+                <a href="[% c.uri_for(c.controller('Users').action_for('edit'), [c.user.id]) %]">Profil</a>
                 <a href="[% c.uri_for(c.controller('Login').action_for('logout')) %]">Logout</a>
             [% ELSE %]
                 <a href="[% c.uri_for(c.controller('Login').action_for('login')) %]">Login</a>
-                <a href="[% c.uri_for(c.controller('Users').action_for('register')) %]">Anmelden</a>
+                <a href="[% c.uri_for(c.controller('Users').action_for('register')) %]">Registrieren</a>
             [% END %]
         </div>
 

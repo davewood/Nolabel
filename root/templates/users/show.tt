@@ -1,17 +1,3 @@
 [% user.name %]
-<a href="[% c.uri_for(c.controller('Users').action_for('edit'), [ user.id ] ) %]"><img title="edit" src="/static/icons/edit.png" /></a>
-
-<form class="button" action="[% c.uri_for(c.controller('Users').action_for('delete'), [ user.id ] ) %]">
-    <input type="submit" value="delete" 
-        onclick="javascript:return confirm('Do you really want to delete this user?')">
-</form>
-
-<br/><br/>
-
+<br/>
 [% user.email %]
-<br/><br/>
-
-Roles:
-[% FOREACH role = user.roles %]
-    [% role.name %]
-[% END %]

@@ -36,7 +36,7 @@ sub _confirm {
                 my $user = $c->find_user({ email => $confirmation->data->{email} }); # set_authenticated needs a user from the store
                 $c->set_authenticated($user); # logs the user in
                 $c->flash(msg => 'Registration successful!');
-                $c->res->redirect($c->uri_for($c->controller('Root')->action_for('index')));
+                $c->res->redirect($c->uri_for($c->controller('Artists')->action_for('create'), [ $user->id ]));
             } elsif ($confirmation->type eq 'email') {
                 $c->flash(msg => 'Email confirmed!');
                 $c->res->redirect($c->uri_for($c->controller('Root')->action_for('index')));

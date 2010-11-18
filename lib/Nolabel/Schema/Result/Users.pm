@@ -87,6 +87,13 @@ __PACKAGE__->many_to_many(
     'role'
 );
 
+__PACKAGE__->might_have(
+    'artist',
+    'Nolabel::Schema::Result::Artists',
+    'user_id',
+    { cascade_delete => 1 },
+);
+
 sub new_password {
     my ($self) = @_;
     use PasswordGenerator;

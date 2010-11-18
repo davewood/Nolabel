@@ -85,8 +85,8 @@ __PACKAGE__->config(
                 ssl      => 1,
                 port     => 465,
                 host     => 'smtp.gmail.com',
-                sasl_username => '###',
-                sasl_password => '###',
+                sasl_username => '',
+                sasl_password => '',
             }
         }
     },

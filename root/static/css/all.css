@@ -94,7 +94,7 @@ form input[type="image"] {
 }
 
 form input[type="radio"], form input[type="checkbox"] {
-    margin-left:12em;
+    margin-left:15em;
 }
 
 table td {
