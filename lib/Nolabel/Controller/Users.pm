@@ -61,22 +61,16 @@ before 'edit' => sub {
     return if ($c->stash->{activate_form_fields});
 
     # set active fields for edit form
+    my @active;
+    if ($user->artist) { push @active, 'edit_artist'; }
     if ($c->check_user_roles('is_su')) {
-        if ($user->artist) {
-            $c->stash->{activate_form_fields} = [qw/edit_artist delete_account name email status roles edit_password/];
-        }
-        else {
-            $c->stash->{activate_form_fields} = [qw/delete_account name email status roles edit_password/];
-        }
+        push @active, qw/delete_account name email status roles edit_password/;
     }
     else {
-        if ($user->artist) {
-            $c->stash->{activate_form_fields} = [qw/edit_artist delete_account change_email send_password/];
-        }
-        else {
-            $c->stash->{activate_form_fields} = [qw/create_artist delete_account change_email send_password/];
-        }
+        push @active, qw/delete_account change_email send_password/;
+        if (!$user->artist) { push @active, 'create_artist'; }
     }
+    $c->stash->{activate_form_fields} = \@active;
 };
 
 sub edit_password : Chained('base_with_id') PathPart('edit_password') Args(0) {
