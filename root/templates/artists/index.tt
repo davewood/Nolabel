@@ -1,7 +1,7 @@
 [% FOREACH artist = artists %]
-    <a href="[% c.uri_for(c.controller('Artists').action_for('show'), [ artist.user.id, artist.id ] ) %]">[% artist.name %]</a>
+    <a href="[% c.uri_for(c.controller('Artists').action_for('show'), [ artist.id ] ) %]">[% artist.name %]</a>
     [% IF c.check_user_roles('is_su') %]
-    <a href="[% c.uri_for(c.controller('Artists').action_for('edit'), [ artist.user.id, artist.id ] ) %]"><img title="edit" src="/static/icons/edit.png" /></a>
+    <a href="[% c.uri_for(c.controller('Artists').action_for('edit'), [ artist.id ] ) %]"><img title="edit" src="/static/icons/edit.png" /></a>
     [% END %]
     <br/>
 [% END %]

@@ -71,7 +71,7 @@ form div label.label {
     width:11em;
 }
 
-form input, a.button {
+form input, textarea, a.button {
     border:2px solid grey;
     -moz-border-radius:5px;
     padding:2px;

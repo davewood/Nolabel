@@ -47,6 +47,25 @@ sub html_change_email {
     return qq{<div><label class="label">Email: </label><a class="button" href="/users/$user_id/change_email">change email</a></div>};
 }
 
+has_field 'edit_artist' => (
+    type        => 'Display',
+    inactive    => 1,
+);
+sub html_edit_artist {
+    my ( $self, $field ) = @_;
+    my $artist_id = $self->item->artist->id;
+    return qq{<div><label class="label">Artist: </label><a class="button" href="/artists/$artist_id/edit">edit</a></div>};
+}
+
+has_field 'create_artist' => (
+    type        => 'Display',
+    inactive    => 1,
+);
+sub html_create_artist {
+    my ( $self, $field ) = @_;
+    return qq{<div><label class="label">Artist: </label><a class="button" href="/artists/create">create</a></div>};
+}
+
 has_field 'status' => ( 
     type        => 'Select',
     widget      => 'radio_group',

@@ -61,10 +61,15 @@ before 'edit' => sub {
 
     # set active fields for edit form
     if ($c->check_user_roles('is_su')) {
-        $c->stash->{activate_form_fields} = [qw/delete_account name email status roles edit_password/];
+        $c->stash->{activate_form_fields} = [qw/edit_artist delete_account name email status roles edit_password/];
     }
     else {
-        $c->stash->{activate_form_fields} = [qw/delete_account change_email send_password/];
+        if ($c->user->artist) {
+            $c->stash->{activate_form_fields} = [qw/edit_artist delete_account change_email send_password/];
+        }
+        else {
+            $c->stash->{activate_form_fields} = [qw/create_artist delete_account change_email send_password/];
+        }
     }
 };
 
