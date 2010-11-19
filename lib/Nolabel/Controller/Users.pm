@@ -55,16 +55,22 @@ around 'delete' => sub {
 
 before 'edit' => sub {
     my ( $self, $c ) = @_;
+    my $user = $c->stash->{user};
 
     # activate_form_fields already set (e.g. in "sub edit_password")
     return if ($c->stash->{activate_form_fields});
 
     # set active fields for edit form
     if ($c->check_user_roles('is_su')) {
-        $c->stash->{activate_form_fields} = [qw/edit_artist delete_account name email status roles edit_password/];
+        if ($user->artist) {
+            $c->stash->{activate_form_fields} = [qw/edit_artist delete_account name email status roles edit_password/];
+        }
+        else {
+            $c->stash->{activate_form_fields} = [qw/delete_account name email status roles edit_password/];
+        }
     }
     else {
-        if ($c->user->artist) {
+        if ($user->artist) {
             $c->stash->{activate_form_fields} = [qw/edit_artist delete_account change_email send_password/];
         }
         else {

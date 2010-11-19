@@ -5,8 +5,6 @@ extends 'HTML::FormHandler';
 
 has_field 'name' => ( 
     type        => 'Text',
-    required    => 1,
-    minlength   => 5,
     maxlength   => 100,
     inactive    => 1,
 );
