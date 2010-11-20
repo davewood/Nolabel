@@ -7,8 +7,6 @@ BEGIN { extends 'Catalyst::Controller::ActionRole' }
 
 with 'CatalystX::TraitFor::Controller::Resource';
 __PACKAGE__->config(
-#    parent_key          => 'user',
-#    parents_accessor    => 'artist',
     resultset_key       => 'artists_rs',
     resources_key       => 'artists',
     resource_key        => 'artist',
@@ -18,7 +16,6 @@ __PACKAGE__->config(
     actions => {
         base    => { 
             PathPart    => 'artists', 
-#            Chained     => '/users/base_with_id',
             Chained     => '/login/not_required',
         },
         create  => {
@@ -55,7 +52,7 @@ before [qw/create/] => sub {
 # override artists index
 sub index :Path('/artists') Args(0) {
     my ( $self, $c ) = @_;
-    $c->stash(artists => [ $c->model('DB::Artists')->all ]);
+    $c->stash(artists => [ $c->model('DB::Artists')->search({ status => 'active' }) ]);
 }
 
 __PACKAGE__->meta->make_immutable;

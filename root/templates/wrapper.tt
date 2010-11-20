@@ -2,14 +2,14 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de" xml:lang="de">
 <head>
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
-    <meta http-equiv="content-language" content="de" />
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link rel="shortcut icon" href="/static/icons/favicon.jpg" type="image/jpeg" />
-    <link rel="icon" href="/static/icons/favicon.jpg" type="image/jpeg" />
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta http-equiv="content-language" content="de"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="shortcut icon" href="/static/icons/favicon.jpg" type="image/jpeg"/>
+    <link rel="icon" href="/static/icons/favicon.jpg" type="image/jpeg"/>
     <title>Nolabel.at</title>
-    <link rel="stylesheet" href="/static/css/all.css" type="text/css" title="Nolabel Stylesheet" charset="utf-8" media="all" />
+    <link rel="stylesheet" href="/static/css/all.css" type="text/css" title="Nolabel Stylesheet" charset="utf-8" media="all"/>
 
     <!-- JQUERY -->
 <!--
@@ -41,7 +41,9 @@
             <a href="[% c.uri_for(c.controller('Root').action_for('index')) %]">Home</a>
             <a href="[% c.uri_for(c.controller('Artists').action_for('index')) %]">Artists</a>
             [% IF c.user_exists %]
-                [% c.user.email %]
+                [% IF c.check_user_roles('is_su') %]
+                    <a href="[% c.uri_for(c.controller('Users').action_for('index')) %]">Users</a>
+                [% END %]
                 <a href="[% c.uri_for(c.controller('Users').action_for('edit'), [c.user.id]) %]">Profil</a>
                 <a href="[% c.uri_for(c.controller('Login').action_for('logout')) %]">Logout</a>
             [% ELSE %]

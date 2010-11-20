@@ -1,5 +1,18 @@
+<table>
+    <tr><th>user</th><th>email</th><th>artist</th></tr>
 [% FOREACH user = users %]
-    <a href="[% c.uri_for(c.controller('Users').action_for('show'), [ user.id ] ) %]">[% user.name %]</a>
-    <a href="[% c.uri_for(c.controller('Users').action_for('edit'), [ user.id ] ) %]"><img title="edit" src="/static/icons/edit.png" /></a>
-    <br/>
+    <tr>
+        <td>
+            <a href="[% c.uri_for(c.controller('Users').action_for('show'), [ user.id ] ) %]">[% user.name %]</a>
+        </td><td>
+            [% user.email %]
+        </td><td>
+    [% IF user.artist %]
+        [% user.artist.name %]
+    [% END %]
+        </td><td>
+            <a href="[% c.uri_for(c.controller('Users').action_for('edit'), [ user.id ] ) %]"><img title="edit" src="/static/icons/edit.png" /></a>
+        </td>
+    </tr>
 [% END %]
+</table>

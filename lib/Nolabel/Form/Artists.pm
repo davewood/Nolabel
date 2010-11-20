@@ -23,6 +23,13 @@ has_field 'description' => (
     size        => 40,
 );
 
+has_field 'status' => ( 
+    type        => 'Select',
+    widget      => 'radio_group',
+    required    => 1,
+    options     => [ map { { value => $_, label => $_} } qw/active inactive/ ],
+);
+
 has_field 'submit' => ( id => 'btn_submit', type => 'Submit', value => 'Submit' );
 
 around 'update_model' => sub {
