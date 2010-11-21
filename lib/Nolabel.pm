@@ -91,7 +91,7 @@ __PACKAGE__->config(
         }
     },
     'Model::DB' => {
-        fs_path      => __PACKAGE__->path_to( qw/ root static media / ),
+        fs_path      => __PACKAGE__->path_to( qw/ root media / ),
         schema_class => 'Nolabel::Schema',
         connect_info => {
             dsn         => 'dbi:Pg:database=nolabel',

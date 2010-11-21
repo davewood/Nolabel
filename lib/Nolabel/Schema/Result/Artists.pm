@@ -70,4 +70,10 @@ __PACKAGE__->belongs_to(
    'user_id',
 );
 
+__PACKAGE__->has_many(
+    'songs',
+    'Nolabel::Schema::Result::Songs',
+    'artist_id',
+);
+
 1;

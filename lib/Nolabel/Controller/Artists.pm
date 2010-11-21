@@ -50,7 +50,7 @@ before [qw/create/] => sub {
 };
 
 # override artists index
-sub index :Path('/artists') Args(0) {
+sub index : Path('/artists') Args(0) {
     my ( $self, $c ) = @_;
     $c->stash(artists => [ $c->model('DB::Artists')->search({ status => 'active' }) ]);
 }

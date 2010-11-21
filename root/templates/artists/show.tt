@@ -1,3 +1,11 @@
 [% artist.name %]
 <br/>
 [% artist.description %]
+<br/>
+<br/>
+<br/>
+Songs:<br/>
+[% FOREACH song = artist.songs %]
+    [% song.name %]
+    <br/>
+[% END %]

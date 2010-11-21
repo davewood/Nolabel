@@ -1,0 +1,16 @@
+<a href="[% c.uri_for(c.controller('Songs').action_for('create'), [ artist.id ] ) %]">Upload new song</a>
+
+<table>
+[% FOREACH song = songs %]
+    <tr>
+        <td>
+            <a href="[% c.uri_for(c.controller('Songs').action_for('send'), [ artist.id, song.id ] ) %]">[% song.name %]</a>
+        </td><td>
+            <a href="[% c.uri_for(c.controller('Songs').action_for('edit'), [ artist.id, song.id ] ) %]"><img title="edit" src="/static/icons/edit.png" /></a>
+            <form class="button" action="[% c.uri_for(c.controller('Songs').action_for('delete'), [ artist.id, song.id ] ) %]">
+                <input type="image" src="/static/icons/delete.png" onclick="javascript:return confirm('Do you really want to delete this song?')">
+            </form>
+        </td>
+    </tr>
+[% END %]
+</table>

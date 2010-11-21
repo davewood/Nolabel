@@ -91,14 +91,6 @@ __PACKAGE__->might_have(
     'artist',
     'Nolabel::Schema::Result::Artists',
     'user_id',
-    { cascade_delete => 1 },
-);
-
-__PACKAGE__->has_many(
-    'media',   
-    'Nolabel::Schema::Result::Media',
-    'user_id',
-    { cascade_delete => 1 }
 );
 
 sub new_password {

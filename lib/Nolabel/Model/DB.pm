@@ -13,7 +13,7 @@ use Moose;
 around 'COMPONENT' => sub {
     my ($orig, $class, $app, $args) = @_;
     my $self = $class->$orig($app, $args);
-    $self->schema->source('Media')->column_info('file')->{fs_column_path} = $self->schema->fs_path();
+    $self->schema->source('Songs')->column_info('file')->{fs_column_path} = $self->schema->fs_path();
     return $self;
 };
 

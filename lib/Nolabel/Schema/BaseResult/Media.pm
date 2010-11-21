@@ -1,4 +1,4 @@
-package Nolabel::Schema::Result::Media;
+package Nolabel::Schema::BaseResult::Media;
 
 use strict;
 use warnings;
@@ -22,12 +22,6 @@ __PACKAGE__->add_columns(
         is_auto_increment   => 1,
         is_numeric          => 1,
         is_nullable         => 0,
-    },
-    'user_id',
-    {
-        data_type   => 'integer',
-        is_numeric  => 1,
-        is_nullable => 0,
     },
     'name',
     {
@@ -78,14 +72,8 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->resultset_attributes({ order_by => 'position' });
 __PACKAGE__->position_column('position');
-__PACKAGE__->grouping_column('user_id');
+#__PACKAGE__->grouping_column('user_id');
 
 __PACKAGE__->set_primary_key('id');
-
-__PACKAGE__->belongs_to(
-   'user',
-   'Nolabel::Schema::Result::Users',
-   'user_id',
-);
 
 1;

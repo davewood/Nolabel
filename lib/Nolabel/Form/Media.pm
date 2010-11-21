@@ -4,7 +4,6 @@ use namespace::autoclean;
 
 extends 'HTML::FormHandler::Model::DBIC';
 
-has '+item_class' => ( default => 'Media' );
 has '+enctype' => ( default => 'multipart/form-data');
 
 has_field 'name' => ( 
@@ -24,11 +23,8 @@ has_field 'edit_file' => (
     type        => 'Display',
     inactive    => 1,
 );
-sub html_edit_file {
-    my ( $self, $field ) = @_;
-    my $media = $self->item;
-    return '<div><label class="label">File: </label><a href="/exercises/' . $media->exercise_id . '/media/' . $media->id .  '/edit_file">edit</a></div>';
-}
+
+has_field 'submit' => ( id => 'btn_submit', type => 'Submit', value => 'Submit' );
 
 before 'update_model' => sub {
     my $self = shift;
@@ -64,7 +60,5 @@ sub validate {
         $self->field('file')->value($fh);
     }
 }
-
-has_field 'submit' => ( id => 'btn_submit', type => 'Submit', value => 'Submit' );
 
 __PACKAGE__->meta->make_immutable;
