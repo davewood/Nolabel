@@ -62,7 +62,7 @@ before 'edit' => sub {
 
     # set active fields for edit form
     my @active;
-    if ($user->artist) { push @active, 'edit_artist'; }
+    if ($user->artist) { push @active, 'edit_artist', 'edit_songs'; }
     if ($c->check_user_roles('is_su')) {
         push @active, qw/delete_account name email status roles edit_password/;
     }

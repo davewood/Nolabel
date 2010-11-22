@@ -17,7 +17,6 @@ __PACKAGE__->config(
     form_class          => 'Nolabel::Form::Songs',
     activate_fields_create => ['file'],
     activate_fields_edit => ['edit_file'],
-    redirect_mode       => 'show_parent',
     actions             => {
         base => {
             PathPart    => 'songs',

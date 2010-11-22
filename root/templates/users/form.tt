@@ -9,6 +9,7 @@
 [% form.result.field('roles').render %]
 [% form.result.field('status').render %]
 [% form.result.field('edit_artist').render %]
+[% form.result.field('edit_songs').render %]
 [% form.result.field('create_artist').render %]
 [% form.result.field('delete_account').render %]
 [% form.result.field('submit').render %]

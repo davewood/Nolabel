@@ -15,8 +15,7 @@
                 controls: {
                     url: "/static/js/flowplayer/plugins/flowplayer.controls-3.2.3.swf",
                     backgroundGradient: "none",
-                    height: 30,
-                    width: 400,
+                    backgroundColor: "#A60000",
                     fullscreen: false,
                     playlist: false,
                     play: false,

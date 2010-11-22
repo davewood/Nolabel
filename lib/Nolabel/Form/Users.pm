@@ -57,6 +57,16 @@ sub html_edit_artist {
     return qq{<div><label class="label">Artist: </label><a class="button" href="/artists/$artist_id/edit">edit</a></div>};
 }
 
+has_field 'edit_songs' => (
+    type        => 'Display',
+    inactive    => 1,
+);
+sub html_edit_songs {
+    my ( $self, $field ) = @_;
+    my $artist_id = $self->item->artist->id;
+    return qq{<div><label class="label">Songs: </label><a class="button" href="/artists/$artist_id/songs">edit</a></div>};
+}
+
 has_field 'create_artist' => (
     type        => 'Display',
     inactive    => 1,
