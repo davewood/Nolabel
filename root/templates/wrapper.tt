@@ -22,17 +22,15 @@
 <!--
     <script type="text/javascript" src="/static/js/flowplayer/flowplayer.min.js"></script>
     <script type="text/javascript" src="/static/js/flowplayer/flowplayer.playlist.js"></script>
-    <script type="text/javascript" src="/static/js/tinymce/tiny_mce.js"></script>
 -->
 
     <!-- TINYMCE -->
-<!--
+    <script type="text/javascript" src="/static/js/tiny_mce/tiny_mce.js"></script>
     <script type="text/javascript">tinyMCE.init({
         mode : "textareas",
         theme : "simple"
     });
     </script>
--->
 
 </head>
 <body>

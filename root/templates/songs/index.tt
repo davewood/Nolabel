@@ -1,10 +1,13 @@
 <a href="[% c.uri_for(c.controller('Songs').action_for('create'), [ artist.id ] ) %]">Upload new song</a>
+<br/>
+<br/>
+<br/>
 
 <table>
 [% FOREACH song = songs %]
     <tr>
         <td>
-            <a href="[% c.uri_for(c.controller('Songs').action_for('send'), [ artist.id, song.id ] ) %]">[% song.name %]</a>
+            [% song.name %]
         </td><td>
             [% IF song.previous_sibling %]
                 <form class="button" action="[% c.uri_for(c.controller('Songs').action_for('move_previous'), [ artist.id, song.id ] ) %]">

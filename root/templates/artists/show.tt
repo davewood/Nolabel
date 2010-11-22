@@ -14,10 +14,12 @@
                 },
                 controls: {
                     url: "/static/js/flowplayer/plugins/flowplayer.controls-3.2.3.swf",
+                    backgroundGradient: "none",
                     height: 30,
                     width: 400,
                     fullscreen: false,
                     playlist: false,
+                    play: false,
                     autoHide: false
                 }
             } 
@@ -37,10 +39,10 @@
 <br/>
 <br/>
 
-<div class="player" id="player" style="width:400px; height:30px;"></div> 
+<div class="player" id="player"></div> 
 <div class="clips">
 [% FOREACH song = artist.songs %]
-    <a style="display:block;" href="[% c.uri_for(c.controller('Songs').action_for('send'), [artist.id, song.id]) %]">[% song.name %]</a>
+    <a href="[% c.uri_for(c.controller('Songs').action_for('send'), [artist.id, song.id]) %]">[% song.name %]</a>
 [% END %]
 </div>
 

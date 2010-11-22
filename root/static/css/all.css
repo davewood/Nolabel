@@ -97,21 +97,28 @@ form input[type="radio"], form input[type="checkbox"] {
     margin-left:15em;
 }
 
-table td {
-    padding-right:1em;
+#player {
+    width:400px;
+    height:30px;
 }
 
 .clips a {
+    color: black;
+    display: block;
     width: 370px;
     height: 30px;
     background-color: #ccc;
     padding-left: 30px;
-    background-image: url("/static/icons/status_off.png");
+    background-image: url("/static/icons/play.png");
     background-repeat: no-repeat;
+    text-decoration: none;
 }
 
 .clips a.playing {
     background-color: #aaa;
-    background-image: url("/static/icons/status_on.png");
+    background-image: url("/static/icons/pause.png");
 }
 
+.clips a.paused {
+    background-image: url("/static/icons/play.png");
+}
