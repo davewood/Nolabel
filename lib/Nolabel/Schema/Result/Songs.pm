@@ -21,4 +21,6 @@ __PACKAGE__->belongs_to(
     'artist_id'
 );
 
+__PACKAGE__->grouping_column('artist_id');
+
 1;

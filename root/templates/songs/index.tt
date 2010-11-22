@@ -6,6 +6,18 @@
         <td>
             <a href="[% c.uri_for(c.controller('Songs').action_for('send'), [ artist.id, song.id ] ) %]">[% song.name %]</a>
         </td><td>
+            [% IF song.previous_sibling %]
+                <form class="button" action="[% c.uri_for(c.controller('Songs').action_for('move_previous'), [ artist.id, song.id ] ) %]">
+                    <input type="image" src="/static/icons/move_up.png" title="move up" alt="move up">
+                </form>
+            [% END %]
+        </td><td>
+            [% IF song.next_sibling %]
+                <form class="button" action="[% c.uri_for(c.controller('Songs').action_for('move_next'), [ artist.id, song.id ] ) %]">
+                    <input type="image" src="/static/icons/move_down.png" title="move down" alt="move down">
+                </form>
+            [% END %]
+        </td><td>
             <a href="[% c.uri_for(c.controller('Songs').action_for('edit'), [ artist.id, song.id ] ) %]"><img title="edit" src="/static/icons/edit.png" /></a>
             <form class="button" action="[% c.uri_for(c.controller('Songs').action_for('delete'), [ artist.id, song.id ] ) %]">
                 <input type="image" src="/static/icons/delete.png" onclick="javascript:return confirm('Do you really want to delete this song?')">

@@ -101,3 +101,17 @@ table td {
     padding-right:1em;
 }
 
+.clips a {
+    width: 370px;
+    height: 30px;
+    background-color: #ccc;
+    padding-left: 30px;
+    background-image: url("/static/icons/status_off.png");
+    background-repeat: no-repeat;
+}
+
+.clips a.playing {
+    background-color: #aaa;
+    background-image: url("/static/icons/status_on.png");
+}
+

@@ -35,10 +35,16 @@ __PACKAGE__->config(
         delete  => {
             Does        => 'NeedsLogin',
         },
+        move_previous  => {
+            Does        => 'NeedsLogin',
+        },
+        move_next  => {
+            Does        => 'NeedsLogin',
+        },
     },
 );
 
-before [qw/index create edit delete/] => sub {
+before [qw/index create edit delete move_previous move_next/] => sub {
     my ( $self, $c ) = @_;
     my $artist = $c->stash->{artist};
     my $user_id = $artist ? $artist->user->id : undef;
@@ -73,6 +79,11 @@ sub edit_file : Chained('base_with_id') PathPart('edit_file') Args(0) {
     $c->stash->{activate_form_fields} = [qw/name file/];
     $c->detach('/songs/edit');
 }
+
+after [qw/move_previous move_next/] => sub {
+    my ( $self, $c ) = @_;
+    $c->res->redirect($c->uri_for($self->action_for('index'), [ $c->stash->{artist}->id ]));
+};
 
 __PACKAGE__->meta->make_immutable;
 
