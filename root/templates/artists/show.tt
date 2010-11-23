@@ -19,7 +19,8 @@
                     fullscreen: false,
                     playlist: false,
                     play: false,
-                    autoHide: false
+                    autoHide: false,
+                    tooltips: null
                 }
             } 
         }).playlist("div.clips", {

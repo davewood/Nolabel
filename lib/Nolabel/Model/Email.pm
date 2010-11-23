@@ -10,7 +10,7 @@ sub send_password {
     $c->model('DB')->schema->txn_do( sub {
 
         my $to = $user->email;
-        my $subject  = 'Logindata for physio-nolabel.at';
+        my $subject  = 'Logindata for nolabel.at';
         my $template = 'logindata.tt';
 
         $c->stash(
@@ -84,7 +84,7 @@ sub _send {
     my ($c, $to, $template, $subject) = @_;
 
     $c->stash->{email} = {
-        from        => 'zivildiener@gmail.com',
+        from        => 'noreply@nolabel.at',
         to          => $to,
         subject     => $subject,
         template    => $template,

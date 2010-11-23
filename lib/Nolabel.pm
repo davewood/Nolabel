@@ -82,9 +82,9 @@ __PACKAGE__->config(
         sender => {
             mailer => 'SMTP',
             mailer_args => {
-                ssl      => 1,
-                port     => 465,
-                host     => 'smtp.gmail.com',
+                #ssl      => 1,
+                #port     => 465,
+                host     => 'smtp.sil.at',
                 sasl_username => '',
                 sasl_password => '',
             }

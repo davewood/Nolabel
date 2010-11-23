@@ -26,6 +26,7 @@ has_field 'description' => (
 has_field 'status' => ( 
     type        => 'Select',
     widget      => 'radio_group',
+    inactive    => 1,
     required    => 1,
     options     => [ map { { value => $_, label => $_} } qw/active inactive/ ],
 );

@@ -12,11 +12,16 @@ __PACKAGE__->config(
     resource_key        => 'artist',
     model               => 'DB::Artists',
     form_class          => 'Nolabel::Form::Artists',
+    activate_fields_edit=> [qw/status/],
     redirect_mode       => 'show',
     actions => {
         base    => { 
             PathPart    => 'artists', 
             Chained     => '/login/not_required',
+        },
+        show    => {
+            # so we can attach the artists name to the url
+            Args        => undef,
         },
         create  => {
             Does        => 'NeedsLogin',
@@ -38,7 +43,7 @@ before [qw/edit delete/] => sub {
         ($c->user->id == $user_id) || $c->check_user_roles('is_su');
 };
 
-before [qw/create/] => sub {
+before 'create' => sub {
     my ( $self, $c ) = @_;
     if ($c->user->artist) {
         $c->stash( error_msg => 'You already have an artist page.');
@@ -47,6 +52,11 @@ before [qw/create/] => sub {
     else {
         $c->stash(form_attrs => { user_id => $c->user->id });
     }
+};
+
+around '_redirect' => sub {
+    my ( $orig, $self, $c) = @_;
+    $c->res->redirect($c->uri_for($c->controller('Users')->action_for('edit'), [$c->stash->{artist}->user->id]));
 };
 
 # override artists index
