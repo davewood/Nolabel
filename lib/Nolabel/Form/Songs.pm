@@ -10,9 +10,22 @@ sub html_edit_file {
     my ( $self, $field ) = @_;
     my $song = $self->item;
     my $song_id = $song->id;
-    my $artist_id = $song->artist->id;
+    my $user_id = $song->user->id;
     return qq{
-        <div><label class="label">File: </label><a href="/artists/$artist_id/songs/$song_id/edit_file">edit</a></div>
+        <div><label class="label">File: </label><a href="/artists/$user_id/songs/$song_id/edit_file">edit</a></div>
     };
 }
+
+around 'validate_file' => sub {
+    my ( $orig, $self, $field ) = @_;
+    my $filename = $field->value->basename;
+    my ($ext) = $filename =~ /\.(.+?)$/;
+    if ($ext eq 'mp3') {
+        $self->$orig($field);
+    }
+    else {
+        $field->add_error('File must be a mp3 file.');
+    }
+};
+
 __PACKAGE__->meta->make_immutable;

@@ -7,7 +7,7 @@ use base 'Nolabel::Schema::BaseResult::Media';
 
 __PACKAGE__->table('songs');
 __PACKAGE__->add_columns(
-    'artist_id',
+    'user_id',
     {
         data_type   => 'integer',
         is_numeric  => 1,
@@ -16,11 +16,11 @@ __PACKAGE__->add_columns(
 );
 
 __PACKAGE__->belongs_to(
-    'artist',
-    'Nolabel::Schema::Result::Artists',
-    'artist_id'
+    'user',
+    'Nolabel::Schema::Result::Users',
+    'user_id'
 );
 
-__PACKAGE__->grouping_column('artist_id');
+__PACKAGE__->grouping_column('user_id');
 
 1;

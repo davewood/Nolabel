@@ -63,8 +63,8 @@ has_field 'edit_songs' => (
 );
 sub html_edit_songs {
     my ( $self, $field ) = @_;
-    my $artist_id = $self->item->artist->id;
-    return qq{<div><label class="label">Songs: </label><a class="button" href="/artists/$artist_id/songs">edit</a></div>};
+    my $user_id = $self->item->id;
+    return qq{<div><label class="label">Songs: </label><a class="button" href="/users/$user_id/songs">edit</a></div>};
 }
 
 has_field 'create_artist' => (

@@ -93,6 +93,12 @@ __PACKAGE__->might_have(
     'user_id',
 );
 
+__PACKAGE__->has_many(
+    'songs',
+    'Nolabel::Schema::Result::Songs',
+    'user_id',
+);
+
 sub new_password {
     my ($self) = @_;
     use PasswordGenerator;

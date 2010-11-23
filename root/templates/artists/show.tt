@@ -15,7 +15,7 @@
                 controls: {
                     url: "/static/js/flowplayer/plugins/flowplayer.controls-3.2.3.swf",
                     backgroundGradient: "none",
-                    backgroundColor: "#A60000",
+                    backgroundColor: "#333333",
                     fullscreen: false,
                     playlist: false,
                     play: false,
@@ -41,8 +41,8 @@
 
 <div class="player" id="player"></div> 
 <div class="clips">
-[% FOREACH song = artist.songs %]
-    <a href="[% c.uri_for(c.controller('Songs').action_for('send'), [artist.id, song.id]) %]">[% song.name %]</a>
+[% FOREACH song = artist.user.songs %]
+    <a href="[% c.uri_for(c.controller('Songs').action_for('send'), [artist.user.id, song.id]) %]">[% song.name %]</a>
 [% END %]
 </div>
 

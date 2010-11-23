@@ -8,7 +8,7 @@ BEGIN { extends 'Catalyst::Controller::ActionRole' }
 with 'CatalystX::Role::Sendfile';
 with 'CatalystX::TraitFor::Controller::SortableResource';
 __PACKAGE__->config(
-    parent_key          => 'artist',
+    parent_key          => 'user',
     parents_accessor    => 'songs',
     resultset_key       => 'songs_rs',
     resources_key       => 'songs',
@@ -20,7 +20,7 @@ __PACKAGE__->config(
     actions             => {
         base => {
             PathPart    => 'songs',
-            Chained     => '/artists/base_with_id',
+            Chained     => '/users/base_with_id',
         },
         index  => {
             Does        => 'NeedsLogin',
@@ -45,10 +45,8 @@ __PACKAGE__->config(
 
 before [qw/index create edit delete move_previous move_next/] => sub {
     my ( $self, $c ) = @_;
-    my $artist = $c->stash->{artist};
-    my $user_id = $artist ? $artist->user->id : undef;
     $c->detach('/denied') unless 
-        ($c->user->id == $user_id) || $c->check_user_roles('is_su');
+        ($c->user->id == $c->stash->{user}->id) || $c->check_user_roles('is_su');
 };
 
 # disable show action
@@ -81,7 +79,7 @@ sub edit_file : Chained('base_with_id') PathPart('edit_file') Args(0) {
 
 after [qw/move_previous move_next/] => sub {
     my ( $self, $c ) = @_;
-    $c->res->redirect($c->uri_for($self->action_for('index'), [ $c->stash->{artist}->id ]));
+    $c->res->redirect($c->uri_for($self->action_for('index'), [ $c->stash->{user}->id ]));
 };
 
 __PACKAGE__->meta->make_immutable;

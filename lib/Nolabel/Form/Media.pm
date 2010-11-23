@@ -33,11 +33,6 @@ before 'update_model' => sub {
 
     return unless($file); # file field in HFH is inactive
 
-    # creates files with filesize 0 bytes
-    #my $fh = $file->fh;
-    #$self->field('file')->value($fh);
-    #$item->file($fh);
-
     use MIMETypes;
     my $mime = MIMETypes::MIMEfromFile($file->basename);
     my ($type, $subtype) = split('/', $mime);
@@ -53,12 +48,9 @@ before 'update_model' => sub {
 
 # after validation we want { file => $filehandle }
 # instead of { file => $catalyst_request_upload }
-sub validate {
-    my $self = shift;
-    if (defined($self->field('file')->value)) {
-        my $fh = $self->field('file')->value->fh;
-        $self->field('file')->value($fh);
-    }
+sub validate_file {
+    my ( $self, $field ) = @_;
+    $field->value($field->value->fh);
 }
 
 __PACKAGE__->meta->make_immutable;
