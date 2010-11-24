@@ -49,6 +49,10 @@ before 'create' => sub {
         $c->stash( error_msg => 'You already have an artist page.');
         $c->detach('/denied');
     } 
+    elsif ($c->check_user_roles('is_su')) {
+        $c->stash( error_msg => 'Superusers can not have artist pages');
+        $c->detach('/denied');
+    }
     else {
         $c->stash(form_attrs => { user_id => $c->user->id });
     }
