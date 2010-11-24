@@ -1,3 +1,5 @@
+[% form.render %]
+
 [% FOREACH artist = artists %]
     <a href="[% c.uri_for(c.controller('Artists').action_for('show'), [ artist.id ], c.model('Name2Url').transform(artist.name) ) %]">[% artist.name %]</a>
     <br/>

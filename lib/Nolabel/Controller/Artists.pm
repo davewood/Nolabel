@@ -66,8 +66,42 @@ around '_redirect' => sub {
 # override artists index
 sub index : Path('/artists') Args(0) {
     my ( $self, $c ) = @_;
-    $c->stash(artists => [ $c->model('DB::Artists')->search({ status => 'active' }) ]);
+
+    use HTML::FormHandler;
+    my $form = HTML::FormHandler->new(
+        field_list => [
+            search => { 
+                type        => 'Text', 
+                required    => 1, 
+                size        => 40, 
+                minlength   => 3, 
+                label       => '',
+            },
+            submit => { type => 'Submit', value => 'Search' },
+        ],
+    );
+
+    $form->process( params  => $c->req->params );
+
+    $c->stash( form => $form );
+
+    if ($form->validated) {
+        my $search = $form->field('search')->value;
+        my @artists = $c->model('DB::Artists')->search({ 
+                status => 'active', 
+                name => { like => '%' . $search . '%'} 
+            });
+        my $num_artists = scalar @artists;
+        if($num_artists) {
+            $c->stash( artists => \@artists );
+        }
+        $c->stash( msg => "$num_artists artist(s) found for '$search'" );
+    }
+    else {
+        $c->stash(artists => [ $c->model('DB::Artists')->search({ status => 'active' }) ]);
+    }
 }
+
 
 __PACKAGE__->meta->make_immutable;
 

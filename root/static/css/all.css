@@ -133,6 +133,6 @@ form input[type="radio"], form input[type="checkbox"] {
     font-size: 0.8em;
 }
 
-#playlist a.playing, #playlist a.paused {
+#playlist a.playing, #playlist a.paused, #playlist a:hover {
     background-color: #389e28;
 }
