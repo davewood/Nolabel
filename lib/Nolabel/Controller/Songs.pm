@@ -22,24 +22,16 @@ __PACKAGE__->config(
             PathPart    => 'songs',
             Chained     => '/users/base_with_id',
         },
-        index  => {
-            Does        => 'NeedsLogin',
-        },
-        create  => {
-            Does        => 'NeedsLogin',
-        },
-        edit    => {
-            Does        => 'NeedsLogin',
-        },
-        delete  => {
-            Does        => 'NeedsLogin',
-        },
-        move_previous  => {
-            Does        => 'NeedsLogin',
-        },
-        move_next  => {
-            Does        => 'NeedsLogin',
-        },
+        (
+            map {$_ => { Does => 'NeedsLogin' }} qw/
+                                                    index
+                                                    create
+                                                    edit
+                                                    delete
+                                                    move_previous
+                                                    move_next
+                                                /,
+        ),
     },
 );
 

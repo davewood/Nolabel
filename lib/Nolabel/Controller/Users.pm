@@ -17,8 +17,19 @@ __PACKAGE__->config(
     actions => {
         base => { 
             PathPart    => 'users', 
-            Chained     => '/login/required', 
+            Chained     => '/login/not_required', 
         },
+        (
+            map {$_ => { Does => 'NeedsLogin' }} qw/
+                                                    show
+                                                    create
+                                                    edit
+                                                    delete
+                                                    send_password
+                                                    change_email
+                                                    edit_password
+                                                /,
+        ),
         index => {
             Does            => 'ACL',
             AllowedRole     => ['is_su'],
