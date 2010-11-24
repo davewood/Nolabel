@@ -1,7 +1,4 @@
 [% FOREACH artist = artists %]
     <a href="[% c.uri_for(c.controller('Artists').action_for('show'), [ artist.id ], c.model('Name2Url').transform(artist.name) ) %]">[% artist.name %]</a>
-    [% IF c.check_user_roles('is_su') %]
-        <a href="[% c.uri_for(c.controller('Artists').action_for('edit'), [ artist.id ] ) %]"><img title="edit" src="/static/icons/edit.png" /></a>
-    [% END %]
     <br/>
 [% END %]

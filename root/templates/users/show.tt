@@ -1,3 +1,26 @@
-[% user.name %]
-<br/>
+<h2>[% user.name %]</h2>
 [% user.email %]
+<br/><br/>
+
+[% IF user.artist %]
+    <a class="button" href="[% c.uri_for(c.controller('Artists').action_for('edit'), [user.artist.id]) %]">edit Artistdetails</a>
+    <a class="button" href="[% c.uri_for(c.controller('Songs').action_for('index'), [user.id]) %]">edit Songs</a>
+[% ELSIF !c.check_user_roles('is_su') %]
+    <a class="button" href="[% c.uri_for(c.controller('Artists').action_for('create')) %]">create Artist</a>
+[% END %]
+
+[% IF c.check_user_roles('is_su') %]
+    <a class="button" href="[% c.uri_for(c.controller('Users').action_for('edit'), [user.id]) %]">edit Userdetails</a>
+[% END %]
+
+<a class="button" href="[% c.uri_for(c.controller('Users').action_for('change_email'), [user.id]) %]">change Email</a>
+
+<form class="button" action="[% c.uri_for(c.controller('Users').action_for('send_password'), [user.id]) %]">
+    <input type="submit" value="send new password"
+        onclick="javascript:return confirm('Do you really want to send a new password?')">
+</form>
+
+<form class="button" action="[% c.uri_for(c.controller('Users').action_for('delete'), [user.id]) %]">
+    <input type="submit" value="delete" 
+        onclick="javascript:return confirm('Do you really want to delete this user?')">
+</form>

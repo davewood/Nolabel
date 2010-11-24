@@ -22,19 +22,23 @@ __PACKAGE__->config(
         (
             map {$_ => { Does => 'NeedsLogin' }} qw/
                                                     show
-                                                    create
-                                                    edit
                                                     delete
                                                     send_password
                                                     change_email
-                                                    edit_password
                                                 /,
         ),
-        index => {
-            Does            => 'ACL',
-            AllowedRole     => ['is_su'],
-            ACLDetachTo     => '/denied',
-        },
+        (
+            map {$_ => {
+                            Does            => 'ACL',
+                            AllowedRole     => ['is_su'],
+                            ACLDetachTo     => '/denied',
+                        }}
+                            qw/
+                                index 
+                                edit 
+                                edit_password
+                            /,
+        ),
     },
 );
 
@@ -44,7 +48,7 @@ before [qw/create/] => sub {
     $c->detach('/error404');
 };
 
-before [qw/show edit delete send_password change_email edit_password/] => sub {
+before [qw/show delete send_password change_email/] => sub {
     my ( $self, $c ) = @_;
     my $user_id = $c->stash->{user}->id;
     $c->detach('/denied') unless 
@@ -72,16 +76,9 @@ before 'edit' => sub {
     return if ($c->stash->{activate_form_fields});
 
     # set active fields for edit form
-    my @active;
-    if ($user->artist) { push @active, 'edit_artist', 'edit_songs'; }
     if ($c->check_user_roles('is_su')) {
-        push @active, qw/delete_account name email status roles edit_password/;
+        $c->stash->{activate_form_fields} = [ qw/name email status roles edit_password/ ];
     }
-    else {
-        push @active, qw/delete_account change_email send_password/;
-        if (!$user->artist) { push @active, 'create_artist'; }
-    }
-    $c->stash->{activate_form_fields} = \@active;
 };
 
 sub edit_password : Chained('base_with_id') PathPart('edit_password') Args(0) {

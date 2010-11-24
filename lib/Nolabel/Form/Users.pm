@@ -37,45 +37,6 @@ sub html_edit_password {
     return qq{<div><label class="label">Password: </label><a class="button" href="/users/$user_id/edit_password">edit password</a></div>};
 }
 
-has_field 'change_email' => (
-    type        => 'Display',
-    inactive    => 1,
-);
-sub html_change_email {
-    my ( $self, $field ) = @_;
-    my $user_id = $self->item->id;
-    return qq{<div><label class="label">Email: </label><a class="button" href="/users/$user_id/change_email">change email</a></div>};
-}
-
-has_field 'edit_artist' => (
-    type        => 'Display',
-    inactive    => 1,
-);
-sub html_edit_artist {
-    my ( $self, $field ) = @_;
-    my $artist_id = $self->item->artist->id;
-    return qq{<div><label class="label">Artist: </label><a class="button" href="/artists/$artist_id/edit">edit</a></div>};
-}
-
-has_field 'edit_songs' => (
-    type        => 'Display',
-    inactive    => 1,
-);
-sub html_edit_songs {
-    my ( $self, $field ) = @_;
-    my $user_id = $self->item->id;
-    return qq{<div><label class="label">Songs: </label><a class="button" href="/users/$user_id/songs">edit</a></div>};
-}
-
-has_field 'create_artist' => (
-    type        => 'Display',
-    inactive    => 1,
-);
-sub html_create_artist {
-    my ( $self, $field ) = @_;
-    return qq{<div><label class="label">Artist: </label><a class="button" href="/artists/create">create</a></div>};
-}
-
 has_field 'status' => ( 
     type        => 'Select',
     widget      => 'radio_group',
@@ -91,24 +52,6 @@ has_field 'password'         => (
     inactive    => 1,
 );
 
-has_field 'send_password' => (
-    type        => 'Display',
-    inactive    => 1,
-);
-sub html_send_password {
-    my ( $self, $field ) = @_;
-    my $user_id = $self->item->id;
-    return qq{
-        <div>
-            <label class="label">Password: </label>
-            <form class="button" action="/users/$user_id/send_password">
-                <input type="submit" value="send new password"
-                    onclick="javascript:return confirm('Do you really want to send a new password?')">
-            </form>
-        </div>
-    };
-}
-
 has_field 'password_confirm' => ( 
     type        => 'PasswordConf',
     required    => 1,
@@ -122,23 +65,5 @@ has_field 'roles' => (
     multiple    => 1,
     inactive    => 1,
 );
-
-has_field 'delete_account' => (
-    type        => 'Display',
-    inactive    => 1,
-);
-sub html_delete_account {
-    my ( $self, $field ) = @_;
-    my $user_id = $self->item->id;
-    return qq{
-        <div>
-            <label class="label">Account: </label>
-            <form class="button" action="/users/$user_id/delete">
-                <input type="submit" value="delete" 
-                    onclick="javascript:return confirm('Do you really want to delete this user?')">
-            </form>
-        </div>
-    };
-}
 
 __PACKAGE__->meta->make_immutable;

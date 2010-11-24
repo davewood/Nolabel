@@ -7,11 +7,9 @@
         </td><td>
             [% user.email %]
         </td><td>
-    [% IF user.artist %]
-        <a href="[% c.uri_for(c.controller('Artists').action_for('show'), [ user.artist.id ] ) %]">[% user.artist.name %]</a>
-    [% END %]
-        </td><td>
-            <a href="[% c.uri_for(c.controller('Users').action_for('edit'), [ user.id ] ) %]"><img title="edit" src="/static/icons/edit.png" /></a>
+            [% IF user.artist %]
+                <a href="[% c.uri_for(c.controller('Artists').action_for('show'), [ user.artist.id ] ) %]">[% user.artist.name %]</a>
+            [% END %]
         </td>
     </tr>
 [% END %]
