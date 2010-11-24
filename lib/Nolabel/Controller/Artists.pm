@@ -60,7 +60,7 @@ before 'create' => sub {
 
 around '_redirect' => sub {
     my ( $orig, $self, $c) = @_;
-    $c->res->redirect($c->uri_for($c->controller('Users')->action_for('edit'), [$c->stash->{artist}->user->id]));
+    $c->res->redirect($c->uri_for($c->controller('Users')->action_for('show'), [$c->stash->{artist}->user->id]));
 };
 
 # override artists index
