@@ -3,6 +3,7 @@
 <br/><br/>
 
 [% IF user.artist %]
+    <a class="button" href="[% c.uri_for(c.controller('Artists').action_for('show'), [user.artist.id]) %]">Profil</a>
     <a class="button" href="[% c.uri_for(c.controller('Artists').action_for('edit'), [user.artist.id]) %]">edit Artistdetails</a>
     <a class="button" href="[% c.uri_for(c.controller('Songs').action_for('index'), [user.id]) %]">edit Songs</a>
 [% ELSIF !c.check_user_roles('is_su') %]

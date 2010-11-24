@@ -46,7 +46,7 @@
                 [% IF c.check_user_roles('is_su') %]
                     <a href="[% c.uri_for(c.controller('Users').action_for('index')) %]">Users</a>
                 [% END %]
-                <a href="[% c.uri_for(c.controller('Users').action_for('show'), [c.user.id]) %]">Profil</a>
+                <a href="[% c.uri_for(c.controller('Users').action_for('show'), [c.user.id]) %]">Settings</a>
                 <a href="[% c.uri_for(c.controller('Login').action_for('logout')) %]">Logout</a>
             [% ELSE %]
                 <a href="[% c.uri_for(c.controller('Login').action_for('login')) %]">Login</a>
