@@ -12,7 +12,7 @@ sub html_edit_file {
     my $song_id = $song->id;
     my $user_id = $song->user->id;
     return qq{
-        <div><label class="label">File: </label><a href="/artists/$user_id/songs/$song_id/edit_file">edit</a></div>
+        <div><label class="label">File: </label><a href="/users/$user_id/songs/$song_id/edit_file">edit</a></div>
     };
 }
 

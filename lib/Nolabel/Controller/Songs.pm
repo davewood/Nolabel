@@ -35,7 +35,7 @@ __PACKAGE__->config(
     },
 );
 
-before [qw/index create edit delete move_previous move_next/] => sub {
+before [qw/index create edit edit_file delete move_previous move_next/] => sub {
     my ( $self, $c ) = @_;
     $c->detach('/denied') unless 
         ($c->user->id == $c->stash->{user}->id) || $c->check_user_roles('is_su');
