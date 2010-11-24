@@ -115,31 +115,20 @@ form input[type="radio"], form input[type="checkbox"] {
 }
 #player_control {
     height:30px;
-    width:300px;
 }
 
-#clips a {
+#playlist a {
     color: black;
     display: block;
-    padding:2px;
+    padding-left:10px;
     margin-top:2px;
     -moz-border-radius:6px;
-    width: 270px;
     height: 20px;
-    background-color: #FF7373;
-    padding-left: 30px;
-    background-image: url("/static/icons/play.png");
-    background-repeat: no-repeat;
+    background-color: #52e93a;
     text-decoration: none;
     font-size: 0.8em;
 }
 
-#clips a.playing {
-    background-color: #FF4040;
-    background-image: url("/static/icons/pause.png");
-}
-
-#clips a.paused {
-    background-color: #FF4040;
-    background-image: url("/static/icons/play.png");
+#playlist a.playing, #playlist a.paused {
+    background-color: #389e28;
 }

@@ -24,7 +24,15 @@ has_field 'description' => (
     apply       => [{ transform => sub {
         my $value = shift;
         use HTML::Scrubber;
-        my $scrubber = HTML::Scrubber->new( allow => [ qw/p br strong ul li/ ] );
+        my $scrubber = HTML::Scrubber->new();
+        $scrubber->rules(
+            a       => { href => 1, target => 1, title => 1 },
+            p       => 1,
+            br      => 1,
+            strong  => 1,
+            ul      => 1,
+            li      => 1,
+        );
         $scrubber->scrub($value);
     }}]
 );

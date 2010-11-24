@@ -19,12 +19,12 @@
                     backgroundColor: "#333333",
                     fullscreen: false,
                     playlist: false,
-                    play: false,
+                    play: true,
                     autoHide: false,
                     tooltips: null
                 }
             } 
-        }).playlist("div#clips", {
+        }).playlist("div#playlist", {
             loop:true
         });
         
@@ -38,12 +38,14 @@
     [% artist.description %]
 </div>
 
+[% IF artist.user.songs %]
 <div id="player">
     <div id="player_control"></div> 
-    <div id="clips">
+    <div id="playlist">
     [% FOREACH song = artist.user.songs %]
         <a href="[% c.uri_for(c.controller('Songs').action_for('send'), [artist.user.id, song.id]) %]">[% song.name %]</a>
     [% END %]
     </div>
 </div>
+[% END %]
 
