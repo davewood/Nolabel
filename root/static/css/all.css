@@ -77,6 +77,11 @@ form input, textarea, a.button {
     padding:2px;
 }
 
+textarea {
+    width:450px;
+    height:300px;
+}
+
 a.button {
     background-color:lightgrey;
     font-size:80%;
@@ -97,16 +102,30 @@ form input[type="radio"], form input[type="checkbox"] {
     margin-left:15em;
 }
 
-#player {
-    width:300px;
-    height:30px;
+#artist_info {
+    float:left;
 }
 
-.clips a {
+#player {
+    width:300px;
+    background-color:#333333;
+    -moz-border-radius:6px;
+    padding:5px;
+    float:right;
+}
+#player_control {
+    height:30px;
+    width:300px;
+}
+
+#clips a {
     color: black;
     display: block;
+    padding:2px;
+    margin-top:2px;
+    -moz-border-radius:6px;
     width: 270px;
-    height: 30px;
+    height: 20px;
     background-color: #FF7373;
     padding-left: 30px;
     background-image: url("/static/icons/play.png");
@@ -115,12 +134,12 @@ form input[type="radio"], form input[type="checkbox"] {
     font-size: 0.8em;
 }
 
-.clips a.playing {
+#clips a.playing {
     background-color: #FF4040;
     background-image: url("/static/icons/pause.png");
 }
 
-.clips a.paused {
+#clips a.paused {
     background-color: #FF4040;
     background-image: url("/static/icons/play.png");
 }

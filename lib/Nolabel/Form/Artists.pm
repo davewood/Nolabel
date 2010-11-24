@@ -21,6 +21,12 @@ has_field 'description' => (
     type        => 'TextArea',
     required    => 1,
     size        => 40,
+    apply       => [{ transform => sub {
+        my $value = shift;
+        use HTML::Scrubber;
+        my $scrubber = HTML::Scrubber->new( allow => [ qw/p br strong ul li/ ] );
+        $scrubber->scrub($value);
+    }}]
 );
 
 has_field 'status' => ( 
