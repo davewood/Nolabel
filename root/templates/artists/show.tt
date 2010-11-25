@@ -42,7 +42,7 @@
     <div id="player_control"></div> 
     <div id="playlist">
     [% FOREACH song = artist.user.songs %]
-        <a href="[% c.uri_for(c.controller('Songs').action_for('send'), [artist.user.id, song.id]) %]">[% song.name %]</a>
+        <a href="[% c.uri_for(c.controller('Songs').action_for('send'), [artist.user.id, song.id], c.model('Name2Url').transform(artist.name _ '-' _ song.name)) %].mp3">[% song.name %]</a>
     [% END %]
     </div>
 </div>

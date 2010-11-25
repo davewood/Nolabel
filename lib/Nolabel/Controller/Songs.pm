@@ -47,7 +47,7 @@ before ['show'] => sub {
     $c->detach('/error404');
 };
 
-sub send : Chained('base_with_id') PathPart('send') Args(0) {
+sub send : Chained('base_with_id') PathPart('send') Args {
     my ( $self, $c ) = @_;
     my $song = $c->stash->{song};
     $self->sendfile($c, $song->file, $song->content_type);
