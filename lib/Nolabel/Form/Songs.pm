@@ -19,12 +19,11 @@ sub html_edit_file {
 around 'validate_file' => sub {
     my ( $orig, $self, $field ) = @_;
     my $filename = $field->value->basename;
-    my ($ext) = $filename =~ /\.(.+?)$/;
-    if ($ext eq 'mp3') {
+    if ($filename =~ m/\.mp3$/) {
         $self->$orig($field);
     }
     else {
-        $field->add_error('File must be a mp3 file.');
+        $field->add_error("File must be a mp3 file: $filename");
     }
 };
 

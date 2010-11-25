@@ -69,6 +69,7 @@ sub index : Path('/artists') Args(0) {
 
     use HTML::FormHandler;
     my $form = HTML::FormHandler->new(
+        http_method => 'GET',
         field_list => [
             search => { 
                 type        => 'Text', 

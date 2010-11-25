@@ -1,7 +1,7 @@
 <script type="text/javascript" src="/static/js/flowplayer/flowplayer-3.2.4.min.js"></script>
 <script type="text/javascript" src="/static/js/flowplayer/plugins/flowplayer.playlist-3.0.8.min.js"></script>
 
-<script>
+<script type="text/javascript">
     $(function() {
         $f("player_control", "/static/js/flowplayer/flowplayer-3.2.5.swf", {
             clip: {

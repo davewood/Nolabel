@@ -77,7 +77,7 @@ form input, textarea, a.button {
     padding:2px;
 }
 
-form.button input {
+form.button input[type="submit"] {
     background-color:lightgrey;
 }
 
